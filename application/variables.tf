@@ -22,9 +22,14 @@ variable "security_group_ids" {
   default     = []
 }
 
+variable "lambda_app_language" {
+  description = "Lambda environment to deploy your app"
+  default     = "python3.5"
+}
+
 variable "deploy_method" {
   description = "Method to deploy the application"
-  default     = "dockerec2"
+  default     = null
 }
 
 variable "availability_zones" {
