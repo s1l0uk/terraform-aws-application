@@ -24,8 +24,8 @@ module "database" {
   ] : var.data_subnet_ids
   security_group_ids = [aws_security_group.database.id]
   tags               = var.tags
-  database_version   = var.database_version
   database_engine    = var.database_engine
+  engine_version   = var.database_version
   availability_zones = var.availability_zones
 }
 

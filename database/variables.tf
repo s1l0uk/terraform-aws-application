@@ -70,9 +70,29 @@ variable "database_engine" {
   default     = "mysql"
 }
 
-variable "database_version" {
+variable "engine_version" {
   description = "If a DB is required, which engine should be used for RDS"
   default     = "5.7"
+}
+
+variable "collation" {
+  description = "The Major DB version"
+  default     = "5"
+}
+
+variable "tx_isolation" {
+  description = "The Major DB version"
+  default     = "5"
+}
+
+variable "time_zone" {
+  description = "The Major DB version"
+  default     = "5"
+}
+
+variable "character_set" {
+  description = "The Major DB version"
+  default     = "5"
 }
 
 
@@ -100,3 +120,9 @@ variable "enable_private_internet_access" {
   type        = bool
   default     = true
 }
+
+variable "major_engine_version" {
+  description = "The Major DB version"
+  default     = "5"
+}
+
