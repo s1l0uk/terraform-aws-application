@@ -22,23 +22,22 @@ resource "aws_db_instance" "postgres_database" {
   backup_window           = var.backup_window
   copy_tags_to_snapshot = var.copy_tags_to_snapshot
   maintenance_window      = var.maintenance_window
+  option_group_name      = var.option_group.name
+  parameter_group_name   = var.parameter_group.name
+  apply_immediately = var.apply_immediately
+  port = var.port
+  iops = var.iops
+  kms_key_id = var.kms_key_id
+  deletion_protection = var.deletion_protection
+  final_snapshot_identifier = var.final_snapshot_identifier
+  enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
+  monitoring_interval = var.monitoring_interval
+  monitoring_role_arn = var.monitoring_role_arn
+  iam_database_authentication_enabled = var.iam_database_authentication_enabled
+  ca_cert_identifier = var.ca_cert_identifier
 
   tags = merge({ "Name" = var.name }, var.tags)
   lifecycle {
     ignore_changes = [password]
   }
 }
-  # option_group_name      = var.option_group.name
-  # parameter_group_name   = var.parameter_group.name
-  # db_subnet_group_name   = var.subnet_group.default.name
-  # apply_immediately = var.apply_immediately
-  # port = var.port
-  # iops = var.iops
-  # kms_key_id = var.kms_key_id
-  # deletion_protection = var.deletion_protection
-  # final_snapshot_identifier = var.final_snapshot_identifier
-  # enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
-  # monitoring_interval = var.monitoring_interval
-  # monitoring_role_arn = var.monitoring_role_arn
-  # iam_database_authentication_enabled = var.iam_database_authentication_enabled
-  # ca_cert_identifier = var.ca_cert_identifier

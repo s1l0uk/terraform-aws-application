@@ -1,0 +1,3 @@
+module "ecr" {
+  source = "../ecr"
+}

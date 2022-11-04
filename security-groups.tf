@@ -1,4 +1,5 @@
 resource "aws_security_group" "database" {
+  count  = var.database_engine != null ? 1 : 0
   name        = "${var.app_name}-db"
   description = "${var.app_name}-app-db"
   vpc_id      = data.aws_vpc.vpc.id

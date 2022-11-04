@@ -15,7 +15,7 @@ resource "aws_db_instance" "default" {
   apply_immediately = var.apply_immediately
   multi_az = length(var.availability_zones) > 1 ? true : false
   port = var.port
-  name = var.name
+  db_name = var.name
   storage_type = var.storage_type
   iops = var.iops
   auto_minor_version_upgrade = var.auto_minor_version_upgrade

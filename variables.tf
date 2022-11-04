@@ -104,3 +104,14 @@ variable "enable_private_internet_access" {
   type        = bool
   default     = true
 }
+
+variable "code_sources" {
+  description = "Sources to install each lambda app from"
+  type        = list
+  default     = null
+}
+
+variable "entry_point" {
+  description = "Entry point for Lambda functions"
+  default     = "lambda_handler:lambda_handler"
+}

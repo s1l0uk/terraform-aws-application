@@ -111,7 +111,7 @@ variable "port" {
 
 variable "storage_type" {
   description = "Change the storage type of the Database instance"
-  default     = ""
+  default     = "standard"
 }
 
 variable "iops" {
