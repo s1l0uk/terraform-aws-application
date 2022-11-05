@@ -14,36 +14,36 @@ module "vpc" {
   region                         = var.aws_region
 }
 
-module "database" {
-  source = "./database"
-  count  = var.database_engine != null ? 1 : 0
-  name   = var.app_name
-  subnet_ids = var.data_subnet_ids == null ? [
-    for sub in module.vpc[0].Subnets : sub.id
-    if length(regexall("data", sub.tags_all.Name)) > 0
-  ] : var.data_subnet_ids
-  security_group_ids = [aws_security_group.database[0].id]
-  tags               = var.tags
-  database_engine    = var.database_engine
-  engine_version   = var.database_version
-  availability_zones = var.availability_zones
-}
-
-module "lambda_app" {
-  source = "./lambda"
-  count  = var.lambda_app_language != null ? 1 : 0
-  name   = "${var.app_name}-lambda"
-  code_sources = var.code_sources
-  entry_point = var.entry_point
-  subnet_ids = var.subnet_ids == null ? [
-    for sub in module.vpc[0].Subnets : sub.id
-    if length(regexall("mid", sub.tags_all.Name)) > 0
-  ] : var.data_subnet_ids
-  security_group_ids = [aws_security_group.webapp.id]
-  tags               = var.tags
-  language           = var.lambda_app_language
-  availability_zones = var.availability_zones
-}
+# module "database" {
+#   source = "./database"
+#   count  = var.database_engine != null ? 1 : 0
+#   name   = var.app_name
+#   subnet_ids = var.data_subnet_ids == null ? [
+#     for sub in module.vpc[0].Subnets : sub.id
+#     if length(regexall("data", sub.tags_all.Name)) > 0
+#   ] : var.data_subnet_ids
+#   security_group_ids = [aws_security_group.database[0].id]
+#   tags               = var.tags
+#   database_engine    = var.database_engine
+#   engine_version   = var.database_version
+#   availability_zones = var.availability_zones
+# }
+# 
+# module "lambda_app" {
+#   source = "./lambda"
+#   count  = var.lambda_app_language != null ? 1 : 0
+#   name   = "${var.app_name}-lambda"
+#   code_sources = var.code_sources
+#   entry_point = var.entry_point
+#   subnet_ids = var.subnet_ids == null ? [
+#     for sub in module.vpc[0].Subnets : sub.id
+#     if length(regexall("mid", sub.tags_all.Name)) > 0
+#   ] : var.data_subnet_ids
+#   security_group_ids = [aws_security_group.webapp.id]
+#   tags               = var.tags
+#   language           = var.lambda_app_language
+#   availability_zones = var.availability_zones
+# }
 
 module "app" {
   source = "./application"

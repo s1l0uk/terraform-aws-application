@@ -6,8 +6,8 @@ module "ec2" {
 }
 
 module "ecs" {
-  source = "./ec2"
-  count = var.deploy_method == "ec2" ? length(var.web_site_code_sources) : 0
+  source = "./ecs"
+  count = var.deploy_method == "ecs" ? length(var.web_site_code_sources) : 0
   name = var.name
   subnet_ids = var.subnet_ids
 }
@@ -21,7 +21,7 @@ module "dockerec2" {
 
 module "fargate" {
   source = "./fargate"
-  count = var.deploy_method == "dockerec2" ? length(var.web_site_code_sources) : 0
+  count = var.deploy_method == "fargate" ? length(var.web_site_code_sources) : 0
   name = var.name
   subnet_ids = var.subnet_ids
 }

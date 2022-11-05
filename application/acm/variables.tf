@@ -1,3 +1,4 @@
+//App Secific
 variable "name" {
   description = "app name to be deployed"
   default     = "flask-api"

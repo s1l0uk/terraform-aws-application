@@ -46,3 +46,19 @@ variable "entry_point" {
   description = "How to run the application"
   default     = "app:app"
 }
+
+variable "enable_cloudfront" {
+  description = "Toggle to enable Cloudfront"
+  default     = false
+}
+
+variable "enable_acm" {
+  description = "Toggle to enable ACM"
+  default     = false
+}
+
+variable "enable_route53" {
+  description = "Toggle to enable Route53"
+  default     = false
+}
+
