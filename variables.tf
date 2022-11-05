@@ -11,12 +11,17 @@ variable "app_name" {
 
 variable "app_port" {
   description = "app port to be served"
-  default     = "443"
+  default     = 80
+}
+
+variable "host_port" {
+  description = "app port to be served"
+  default     = 80
 }
 
 variable "db_port" {
   description = "Database port to be used"
-  default     = "443"
+  default     = 3306
 }
 
 variable "vpc_id" {
@@ -41,6 +46,11 @@ variable "availability_zones" {
   description = "[Optional] A list of Availability zones to operate in."
   default     = ["a", "b", "c"]
   type        = list(string)
+}
+
+variable "website_code_sources" {
+  description = "List of sources to take code for deploy from"
+  type = list(string)
 }
 
 // App vars

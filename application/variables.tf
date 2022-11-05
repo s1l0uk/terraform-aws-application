@@ -1,7 +1,12 @@
 //App Secific
 variable "name" {
   description = "app name to be deployed"
-  default     = "flask-api"
+  default     = null
+}
+
+variable "region" {
+  description = "region to be deployed in"
+  default     = null
 }
 
 variable "subnet_ids" {
@@ -19,7 +24,7 @@ variable "tags" {
 
 variable "security_group_ids" {
   description = "Security groups to apply to the instance"
-  default     = []
+  default     = null
 }
 
 variable "lambda_app_language" {
@@ -32,6 +37,11 @@ variable "deploy_method" {
   default     = null
 }
 
+variable "ami_id" {
+  description = "AMI to deploy"
+  default     = null
+}
+
 variable "availability_zones" {
   description = "AZs to ensure the app is present in"
   default     = ["a", "b", "c"]
@@ -39,7 +49,8 @@ variable "availability_zones" {
 
 variable "web_site_code_sources" {
   description = "Where to fetch the code from"
-  default     = []
+  type = list(any)
+  default     = null
 }
 
 variable "entry_point" {
@@ -62,3 +73,40 @@ variable "enable_route53" {
   default     = false
 }
 
+variable "vpc_id" {
+  description = "VPC to deploy into"
+  default     = null
+}
+
+
+variable "environment_variables" {
+  description = "Environment variables to deploy with"
+  default     = null
+}
+
+variable "memory" {
+  description = "How Much Memory should be allocated"
+  default = 1000
+}
+
+variable "cpu" {
+  description = "How Much CPU should be allocated"
+  default = 2
+}
+
+variable "loadbalancer" {
+  description = "The loadbalancer to use with this deploy"
+}
+
+variable "health_check_path" {
+  description = "The loadbalancer health check path"
+  default = "/"
+}
+
+variable "host_port" {
+  description = "The host port"
+}
+
+variable "container_port" {
+  description = "The Container port"
+}

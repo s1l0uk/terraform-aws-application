@@ -1,8 +1,7 @@
 //Gets the base if we don't have one!
 
 module "vpc" {
-  source = "../aws-vpc-network"
-  # source = "git::https://github.com/s1l0uk/terraform-aws-vpc-network.git"
+  source = "git::https://github.com/s1l0uk/terraform-aws-vpc-network.git"
   count                          = var.vpc_id == null ? 1 : 0
   name                           = var.app_name
   network_cidr_range             = var.network_cidr_range
@@ -47,6 +46,7 @@ module "vpc" {
 
 module "app" {
   source = "./application"
+  count = length(var.website_code_sources)
   name   = var.app_name
   subnet_ids = var.data_subnet_ids == null ? [
     for sub in module.vpc[0].Subnets : sub.id
@@ -56,4 +56,8 @@ module "app" {
   tags               = var.tags
   deploy_method      = var.deploy_method
   availability_zones = var.availability_zones
+  loadbalancer = aws_elb.elb_app.id
+  host_port = var.host_port
+  container_port = var.app_port
+  web_site_code_sources = var.website_code_sources
 }

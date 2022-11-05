@@ -3,10 +3,9 @@ locals {
 }
 
 resource "null_resource" "docker" {
-  count = var.image_path == "" ? 0 : 1
   provisioner "local-exec" {
     working_dir = path.module
-    command     = "aws ecr get-login-password --region ${data.aws_region.current.name} | docker login --username AWS --password-stdin ${local.ecr_address}; docker build -t ${module.ecr.aws_ecr_repository_url}:latest ${path.cwd}/${var.image_path}/. && docker push ${module.ecr.aws_ecr_repository_url}:latest"
+    command     = "aws ecr get-login-password --region ${data.aws_region.current.name} | docker login --username AWS --password-stdin ${local.ecr_address}; docker build -t ${var.ecr_repository_url}:latest ${path.cwd}/${var.code_source}/. && docker push ${var.ecr_repository_url}:latest"
   }
 }
 

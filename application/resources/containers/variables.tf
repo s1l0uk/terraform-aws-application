@@ -2,12 +2,12 @@ variable "name" {
   description = "the name of your stack, e.g. \"demo\""
 }
 
-variable "environment" {
-  description = "the name of your environment, e.g. \"prod\""
-}
-
 variable "region" {
   description = "the AWS region in which resources are created"
+}
+
+variable "ecr_repository_url" {
+  description = "Register repository URL"
 }
 
 variable "vpc_id" {
@@ -32,10 +32,12 @@ variable "host_port" {
 
 variable "container_cpu" {
   description = "The number of cpu units used by the task"
+  default = 2
 }
 
 variable "container_memory" {
   description = "The amount (in MiB) of memory used by the task"
+  default = 1000
 }
 
 variable "container_image" {
@@ -52,14 +54,15 @@ variable "aws_ecs_cluster" {
 
 variable "service_desired_count" {
   description = "Number of services running in parallel"
+  default = 2
 }
 
 variable "health_check_path" {
-  description = ""
+  description = "Path that Loadbalancer should check for status"
 }
 
 variable "protocol" {
-  description = ""
+  description = "The protocol of the application"
 }
 
 variable "container_environment" {
@@ -69,10 +72,9 @@ variable "container_environment" {
 
 variable "ssl_arn" {
   description = "Which SSL certificate to load"
-  default     = ""
+  default     = null
 }
 
-variable "image_path" {
+variable "code_source" {
   description = "Path to the Containers Context to build from local source"
-  default     = ""
 }

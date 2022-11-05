@@ -1,10 +1,3 @@
-module "ecr" {
-  source      = "../ecr"
-  name        = var.name
-  environment = var.environment
-}
-
-
 resource "aws_iam_role" "ecs_task_role" {
   name = "${var.name}-ecsTaskRole"
 
@@ -71,11 +64,10 @@ resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
 }
 
 resource "aws_cloudwatch_log_group" "main" {
-  name = "/ecs/${var.name}-task-${var.environment}"
+  name = "/ecs/${var.name}-task"
 
   tags = {
-    Name        = "${var.name}-task-${var.environment}"
-    Environment = var.environment
+    Name        = "${var.name}-task"
   }
 }
 
@@ -85,15 +77,14 @@ resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attach
 }
 
 resource "aws_ecs_task_definition" "main" {
-  family                   = "${var.name}-task-${var.environment}"
+  family                   = "${var.name}-task"
   network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
   cpu                      = var.container_cpu
   memory                   = var.container_memory
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
-    name        = "${var.name}-container-${var.environment}"
+    name        = "${var.name}-container"
     image       = "${var.container_image}:latest"
     essential   = true
     environment = var.container_environment
@@ -113,13 +104,12 @@ resource "aws_ecs_task_definition" "main" {
   }])
 
   tags = {
-    Name        = "${var.name}-task-${var.environment}"
-    Environment = var.environment
+    Name        = "${var.name}-task"
   }
 }
 
 resource "aws_ecs_service" "main" {
-  name                               = "${var.name}-service-${var.environment}"
+  name                               = "${var.name}-service"
   cluster                            = var.aws_ecs_cluster
   task_definition                    = aws_ecs_task_definition.main.arn
   desired_count                      = var.service_desired_count
@@ -131,13 +121,13 @@ resource "aws_ecs_service" "main" {
 
   network_configuration {
     security_groups  = var.ecs_service_security_groups
-    subnets          = var.subnets.*.id
+    subnets          = var.subnets
     assign_public_ip = false
   }
 
   load_balancer {
     target_group_arn = aws_lb_target_group.main.arn
-    container_name   = "${var.name}-container-${var.environment}"
+    container_name   = "${var.name}-container"
     container_port   = var.container_port
   }
 
@@ -195,7 +185,7 @@ resource "aws_appautoscaling_policy" "ecs_policy_cpu" {
 }
 
 resource "aws_lb_target_group" "main" {
-  name        = "${var.name}-tg-${var.environment}"
+  name        = "${var.name}-tg"
   port        = var.host_port
   protocol    = upper(var.protocol)
   vpc_id      = var.vpc_id
@@ -217,8 +207,7 @@ resource "aws_lb_target_group" "main" {
   }
 
   tags = {
-    Name        = "${var.name}-tg-${var.environment}"
-    Environment = var.environment
+    Name        = "${var.name}-tg"
   }
 }
 

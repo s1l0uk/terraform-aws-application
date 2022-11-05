@@ -1,6 +1,12 @@
+//App Secific
 variable "name" {
   description = "app name to be deployed"
-  default     = "flask-api"
+  default     = null
+}
+
+variable "hostname" {
+  description = "Hostname for the app to be deployed with"
+  default     = null
 }
 
 variable "subnet_ids" {
@@ -14,4 +20,9 @@ variable "tags" {
   default = {
     enviroment = "alpha"
   }
+}
+
+variable "code_source" {
+  description = "app name to be deployed"
+  default     = null
 }

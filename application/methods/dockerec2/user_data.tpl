@@ -15,7 +15,7 @@ write_files:
             proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header   X-Forwarded-Host $server_name;
         }
-        
+
         location /health {
             access_log off;
             return 200 'OK!';
@@ -52,11 +52,11 @@ write_files:
     path: /tmp/docker-compose.yml
 runcmd:
  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
- - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+ - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_r
  - apt-get update
  - apt-get -y install docker-ce
  - usermod -aG docker ubuntu
- - curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+ - curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`un
  - chmod +x /usr/local/bin/docker-compose
  - systemctl start docker
  - mkdir /app
