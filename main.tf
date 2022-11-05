@@ -1,7 +1,35 @@
 //Gets the base if we don't have one!
 
+locals {
+  code_sources = [
+    for repo in var.code_sources :
+    length(regexall(repo, "://")) == 0 ? repo : split(".", split("/", repo)[length(split("/", repo)) - 1])[0]
+  ]
+  website_code_sources = [
+    for repo in var.website_code_sources :
+    length(regexall(repo, "://")) == 0 ? repo : split(".", split("/", repo)[length(split("/", repo)) - 1])[0]
+  ]
+  code_base_to_checkout = compact([
+    for repo in concat(var.code_sources, var.website_code_sources) :
+    length(regexall(repo, "://")) > 0 ? repo : null
+  ])
+}
+
+resource "null_resource" "git_clone" {
+  count = length(local.code_base_to_checkout)
+  provisioner "local-exec" {
+    command = "git clone ${local.code_base_to_checkout[count.index]}"
+  }
+}
+
+resource "null_resource" "app_build" {
+  count = var.build_command != "" ? length(local.website_code_sources) : 0
+  provisioner "local-exec" {
+    command = var.build_command
+  }
+}
 module "vpc" {
-  source = "git::https://github.com/s1l0uk/terraform-aws-vpc-network.git"
+  source                         = "git::https://github.com/s1l0uk/terraform-aws-vpc-network.git"
   count                          = var.vpc_id == null ? 1 : 0
   name                           = var.app_name
   network_cidr_range             = var.network_cidr_range
@@ -46,18 +74,18 @@ module "vpc" {
 
 module "app" {
   source = "./application"
-  count = length(var.website_code_sources)
+  count  = length(var.website_code_sources)
   name   = var.app_name
   subnet_ids = var.data_subnet_ids == null ? [
     for sub in module.vpc[0].Subnets : sub.id
     if length(regexall("mid", sub.tags_all.Name)) > 0
   ] : var.subnet_ids
-  security_group_ids = [aws_security_group.webapp.id]
-  tags               = var.tags
-  deploy_method      = var.deploy_method
-  availability_zones = var.availability_zones
-  loadbalancer = aws_elb.elb_app.id
-  host_port = var.host_port
-  container_port = var.app_port
+  security_group_ids    = [aws_security_group.webapp.id]
+  tags                  = var.tags
+  deploy_method         = var.deploy_method
+  availability_zones    = var.availability_zones
+  loadbalancer          = aws_elb.elb_app.id
+  host_port             = var.host_port
+  container_port        = var.app_port
   web_site_code_sources = var.website_code_sources
 }

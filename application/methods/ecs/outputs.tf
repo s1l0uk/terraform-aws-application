@@ -1,6 +1,6 @@
 output "cluster_object" {
   description = "Whole Cluster object"
-  value = aws_ecs_cluster.cluster
+  value       = aws_ecs_cluster.cluster
 }
 
 output "cluster_id" {

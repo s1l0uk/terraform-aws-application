@@ -1,5 +1,5 @@
 resource "aws_security_group" "database" {
-  count  = var.database_engine != null ? 1 : 0
+  count       = var.database_engine != null ? 1 : 0
   name        = "${var.app_name}-db"
   description = "${var.app_name}-app-db"
   vpc_id      = data.aws_vpc.vpc.id
@@ -8,7 +8,7 @@ resource "aws_security_group" "database" {
     from_port       = var.db_port
     to_port         = var.db_port
     protocol        = "tcp"
-    security_groups = [ aws_security_group.webapp.id ]
+    security_groups = [aws_security_group.webapp.id]
 
   }
 
@@ -30,7 +30,7 @@ resource "aws_security_group" "webapp" {
     from_port       = var.app_port
     to_port         = var.app_port
     protocol        = "tcp"
-    security_groups = [ aws_security_group.loadbalancer.id ]
+    security_groups = [aws_security_group.loadbalancer.id]
   }
 
   egress {

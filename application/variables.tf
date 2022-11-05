@@ -49,7 +49,7 @@ variable "availability_zones" {
 
 variable "web_site_code_sources" {
   description = "Where to fetch the code from"
-  type = list(any)
+  type        = list(any)
   default     = null
 }
 
@@ -86,12 +86,12 @@ variable "environment_variables" {
 
 variable "memory" {
   description = "How Much Memory should be allocated"
-  default = 1000
+  default     = 1000
 }
 
 variable "cpu" {
   description = "How Much CPU should be allocated"
-  default = 2
+  default     = 2
 }
 
 variable "loadbalancer" {
@@ -100,7 +100,7 @@ variable "loadbalancer" {
 
 variable "health_check_path" {
   description = "The loadbalancer health check path"
-  default = "/"
+  default     = "/"
 }
 
 variable "host_port" {
@@ -109,4 +109,9 @@ variable "host_port" {
 
 variable "container_port" {
   description = "The Container port"
+}
+
+variable "build_command" {
+  description = "command used to build website apps for NodeJS etc"
+  default     = ""
 }

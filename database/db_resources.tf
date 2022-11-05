@@ -3,7 +3,7 @@ resource "aws_db_option_group" "default" {
   name                     = var.name
   major_engine_version     = local.major_engine_version
   option_group_description = "DB Option group for ${var.name}"
-  tags = merge({ "Name" = var.name }, var.tags)
+  tags                     = merge({ "Name" = var.name }, var.tags)
 }
 
 resource "aws_db_parameter_group" "default" {

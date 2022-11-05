@@ -26,17 +26,17 @@ variable "user_data" {
 
 variable "max_capacity" {
   description = "How many instances should be in the ASG"
-  default = 3
+  default     = 3
 }
 
 variable "desired_capacity" {
   description = "How many instances should be in the ASG to start"
-  default = 2
+  default     = 2
 }
 
 variable "min_capacity" {
   description = "How few instances should be in the ASG at all times"
-  default = 1
+  default     = 1
 }
 
 variable "loadbalancer" {

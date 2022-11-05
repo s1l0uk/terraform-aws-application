@@ -23,11 +23,11 @@ resource "aws_autoscaling_group" "asg_web_app" {
   min_elb_capacity    = 1
 
   launch_configuration = aws_launch_configuration.lc_web_app.name
-  tags = [ for k, v in var.tags :
+  tags = [for k, v in var.tags :
     {
-          "key"                 = k
-          "value"               = v
-          "propagate_at_launch" = true
+      "key"                 = k
+      "value"               = v
+      "propagate_at_launch" = true
     }
   ]
 }

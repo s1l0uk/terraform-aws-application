@@ -67,7 +67,7 @@ resource "aws_cloudwatch_log_group" "main" {
   name = "/ecs/${var.name}-task"
 
   tags = {
-    Name        = "${var.name}-task"
+    Name = "${var.name}-task"
   }
 }
 
@@ -77,12 +77,12 @@ resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attach
 }
 
 resource "aws_ecs_task_definition" "main" {
-  family                   = "${var.name}-task"
-  network_mode             = "awsvpc"
-  cpu                      = var.container_cpu
-  memory                   = var.container_memory
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  task_role_arn            = aws_iam_role.ecs_task_role.arn
+  family             = "${var.name}-task"
+  network_mode       = "awsvpc"
+  cpu                = var.container_cpu
+  memory             = var.container_memory
+  execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
+  task_role_arn      = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
     name        = "${var.name}-container"
     image       = "${var.container_image}:latest"
@@ -104,7 +104,7 @@ resource "aws_ecs_task_definition" "main" {
   }])
 
   tags = {
-    Name        = "${var.name}-task"
+    Name = "${var.name}-task"
   }
 }
 
@@ -207,7 +207,7 @@ resource "aws_lb_target_group" "main" {
   }
 
   tags = {
-    Name        = "${var.name}-tg"
+    Name = "${var.name}-tg"
   }
 }
 

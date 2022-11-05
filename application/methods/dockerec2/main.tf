@@ -10,7 +10,7 @@ data "template_file" "user_data" {
   template = var.user_data == "" ? file("${path.module}/user_data.tpl") : file(var.user_data)
   vars = {
     api_version = ""
-    path = ""
+    path        = ""
   }
 }
 
@@ -26,13 +26,13 @@ resource "null_resource" "docker" {
 }
 
 module "asg" {
-  source = "../../resources/asg"
-  subnet_ids = var.subnet_ids
+  source             = "../../resources/asg"
+  subnet_ids         = var.subnet_ids
   security_group_ids = var.security_group_ids
-  instance_type = var.instance_type
-  loadbalancer = var.loadbalancer
-  user_data = data.template_file.user_data
-  name = var.name
-  ami_id = var.ami_id
+  instance_type      = var.instance_type
+  loadbalancer       = var.loadbalancer
+  user_data          = data.template_file.user_data
+  name               = var.name
+  ami_id             = var.ami_id
 }
 

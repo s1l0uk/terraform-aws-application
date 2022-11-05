@@ -19,7 +19,7 @@ resource "aws_s3_bucket_website_configuration" "root_bucket" {
       http_error_code_returned_equals = "200"
     }
     redirect {
-      protocol = "https"
+      protocol  = "https"
       host_name = "www.${var.hostname}"
     }
   }

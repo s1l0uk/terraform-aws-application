@@ -1,6 +1,6 @@
 module "vpc_lambda_function" {
   source = "terraform-aws-modules/lambda/aws"
-  count = length(var.code_sources)
+  count  = length(var.code_sources)
 
   function_name = var.name
   description   = "lambda function for ${var.name} - ${var.code_sources[count.index]}"
@@ -11,7 +11,7 @@ module "vpc_lambda_function" {
 
   vpc_subnet_ids         = var.subnet_ids
   vpc_security_group_ids = var.security_group_ids
-  attach_network_policy = true
+  attach_network_policy  = true
   allowed_triggers = {
     OneRule = {
       principal  = "events.amazonaws.com"

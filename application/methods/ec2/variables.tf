@@ -21,7 +21,7 @@ variable "code_source" {
 
 variable "instance_type" {
   description = "Instance size to use"
-  default = "t2.micros"
+  default     = "t2.micros"
 }
 
 variable "security_group_ids" {
@@ -30,7 +30,7 @@ variable "security_group_ids" {
 
 variable "user_data" {
   description = "which User data file should be templated for deployment"
-  default = ""
+  default     = ""
 }
 variable "loadbalancer" {
   description = "The Loadbalancer ID to attach to"

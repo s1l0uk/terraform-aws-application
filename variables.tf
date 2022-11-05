@@ -50,7 +50,7 @@ variable "availability_zones" {
 
 variable "website_code_sources" {
   description = "List of sources to take code for deploy from"
-  type = list(string)
+  type        = list(string)
 }
 
 // App vars

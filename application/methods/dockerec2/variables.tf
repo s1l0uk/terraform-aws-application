@@ -22,7 +22,7 @@ variable "code_source" {
 }
 
 variable "capacity_provider" {
-  default = "FARGATE_SPOT"
+  default     = "FARGATE_SPOT"
   description = "Which capacity provider to use, FARGATE_SPOT for example"
 }
 
@@ -31,26 +31,26 @@ variable "loadbalancer" {
 }
 variable "container_cpu" {
   description = "The Containers CPU"
-  default = 2
+  default     = 2
 }
 variable "container_memory" {
   description = "The Containers Memory allocation"
-  default = 1000
+  default     = 1000
 }
 variable "ami_id" {
   description = "AMI to deploy on"
 }
 variable "desired_count" {
   description = "number of containers to deploy"
-  default = 2
+  default     = 2
 }
 variable "instance_type" {
   description = "Which instance size to use in the fleet"
-  default = "t2.micro"
+  default     = "t2.micro"
 }
 variable "protocol" {
   description = "Container protocol"
-  default = "http"
+  default     = "http"
 }
 variable "container_environment" {
   description = "Environment Variables to deploy with"
@@ -77,5 +77,5 @@ variable "region" {
 
 variable "user_data" {
   description = "which User data file should be templated for deployment"
-  default = ""
+  default     = ""
 }

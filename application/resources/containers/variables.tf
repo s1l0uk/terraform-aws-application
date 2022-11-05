@@ -32,12 +32,12 @@ variable "host_port" {
 
 variable "container_cpu" {
   description = "The number of cpu units used by the task"
-  default = 2
+  default     = 2
 }
 
 variable "container_memory" {
   description = "The amount (in MiB) of memory used by the task"
-  default = 1000
+  default     = 1000
 }
 
 variable "container_image" {
@@ -54,7 +54,7 @@ variable "aws_ecs_cluster" {
 
 variable "service_desired_count" {
   description = "Number of services running in parallel"
-  default = 2
+  default     = 2
 }
 
 variable "health_check_path" {
