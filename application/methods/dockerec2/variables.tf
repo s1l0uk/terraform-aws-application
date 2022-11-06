@@ -79,3 +79,14 @@ variable "user_data" {
   description = "which User data file should be templated for deployment"
   default     = ""
 }
+
+variable "max_capacity" {
+  description = "How many instances should be in the ASG"
+  default     = 3
+}
+
+variable "min_capacity" {
+  description = "How few instances should be in the ASG at all times"
+  default     = 1
+}
+

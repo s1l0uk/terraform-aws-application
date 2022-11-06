@@ -18,6 +18,8 @@ module "ec2" {
   count              = var.deploy_method == "ec2" ? length(var.web_site_code_sources) : 0
   name               = var.name
   subnet_ids         = var.subnet_ids
+  max_capacity          = var.max_capacity
+  min_capacity          = var.min_capacity
   code_source        = var.web_site_code_sources[count.index]
   security_group_ids = var.security_group_ids
   loadbalancer       = var.loadbalancer
@@ -47,6 +49,8 @@ module "dockerec2" {
   source                = "./methods/dockerec2"
   count                 = var.deploy_method == "dockerec2" ? length(var.web_site_code_sources) : 0
   name                  = var.name
+  max_capacity          = var.max_capacity
+  min_capacity          = var.min_capacity
   subnet_ids            = var.subnet_ids
   code_source           = var.web_site_code_sources[count.index]
   security_group_ids    = var.security_group_ids
@@ -82,8 +86,9 @@ module "fargate" {
 module "s3" {
   source      = "./methods/s3"
   count       = var.deploy_method == "s3" ? length(var.web_site_code_sources) : 0
-  name        = var.name
+  name        = "${var.name}-${count.index}"
   code_source = var.web_site_code_sources[count.index]
+  hostname = var.hostname
 }
 
 //Lambda handles many in other module

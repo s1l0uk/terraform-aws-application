@@ -115,3 +115,23 @@ variable "build_command" {
   description = "command used to build website apps for NodeJS etc"
   default     = ""
 }
+
+variable "hostname" {
+  description = "Hostname to use on the web for the application"
+  default     = "2ndstudios.com"
+}
+
+variable "protocol" {
+  description = "The protocol of the application"
+}
+
+variable "max_capacity" {
+  description = "How many instances should be in the ASG"
+  default     = 3
+}
+
+variable "min_capacity" {
+  description = "How few instances should be in the ASG at all times"
+  default     = 1
+}
+

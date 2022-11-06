@@ -8,11 +8,14 @@ data "template_file" "user_data" {
 
 module "asg" {
   source             = "../../resources/asg"
-  subnet_ids         = var.subnet_ids
-  security_group_ids = var.security_group_ids
+  vpc_zone_identifier = var.subnet_ids
+  security_groups = var.security_group_ids
   instance_type      = var.instance_type
+  load_balancers = [ var.loadbalancer ]
+  user_data          = base64encode(data.template_file.user_data.rendered)
   name               = var.name
-  loadbalancer       = var.loadbalancer
-  user_data          = data.template_file.user_data
-  ami_id             = var.ami_id
+  min_size           = var.min_capacity
+  max_size           = var.max_capacity
+  image_id = var.ami_id
 }
+

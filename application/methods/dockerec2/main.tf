@@ -27,12 +27,14 @@ resource "null_resource" "docker" {
 
 module "asg" {
   source             = "../../resources/asg"
-  subnet_ids         = var.subnet_ids
-  security_group_ids = var.security_group_ids
+  vpc_zone_identifier = var.subnet_ids
+  security_groups = var.security_group_ids
   instance_type      = var.instance_type
-  loadbalancer       = var.loadbalancer
-  user_data          = data.template_file.user_data
+  load_balancers = [ var.loadbalancer ]
+  user_data          = base64encode(data.template_file.user_data.rendered)
+  min_size           = var.min_capacity
+  max_size           = var.max_capacity
   name               = var.name
-  ami_id             = var.ami_id
+  image_id = var.ami_id
 }
 

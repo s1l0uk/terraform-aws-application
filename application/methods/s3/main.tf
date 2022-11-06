@@ -1,5 +1,13 @@
+resource "aws_s3_bucket" "root_bucket" {
+  bucket = var.name
+}
+
+resource "aws_s3_bucket" "www_bucket" {
+  bucket = "www-${var.name}"
+}
+
 resource "aws_s3_bucket_website_configuration" "www_bucket" {
-  bucket = "www.${var.name}"
+  bucket = "www-${var.name}"
 
   index_document {
     suffix = "index.html"
@@ -14,19 +22,14 @@ resource "aws_s3_bucket_website_configuration" "www_bucket" {
 resource "aws_s3_bucket_website_configuration" "root_bucket" {
   bucket = var.name
 
-  routing_rule {
-    condition {
-      http_error_code_returned_equals = "200"
-    }
-    redirect {
-      protocol  = "https"
-      host_name = "www.${var.hostname}"
-    }
+  redirect_all_requests_to {
+    protocol  = "https"
+    host_name = "www.${var.hostname}"
   }
 }
 
 resource "aws_s3_bucket_cors_configuration" "cors" {
-  bucket = aws_s3_bucket_website_configuration.www_bucket.id
+  bucket = "www-${var.name}"
 
   cors_rule {
     allowed_headers = ["Authorization", "Content-Length"]
@@ -41,7 +44,7 @@ resource "aws_s3_bucket_cors_configuration" "cors" {
 resource "aws_s3_bucket_object" "file" {
   for_each = fileset(var.code_source, "**")
 
-  bucket      = aws_s3_bucket_website_configuration.www_bucket.id
+  bucket      = "www-${var.name}"
   key         = each.key
   source      = "${var.code_source}/${each.key}"
   source_hash = filemd5("${var.code_source}/${each.key}")

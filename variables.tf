@@ -1,12 +1,15 @@
 //App Secific
 variable "aws_region" {
   description = "AWS region"
-  default     = "eu-west-1"
 }
 
 variable "app_name" {
   description = "app name to be deployed"
   default     = "flask-api"
+}
+
+variable "hostname" {
+  description = "hostname to use on the web"
 }
 
 variable "app_port" {
@@ -42,15 +45,14 @@ variable "tags" {
   }
 }
 
-variable "availability_zones" {
-  description = "[Optional] A list of Availability zones to operate in."
-  default     = ["a", "b", "c"]
-  type        = list(string)
-}
-
 variable "website_code_sources" {
   description = "List of sources to take code for deploy from"
   type        = list(string)
+}
+
+variable "build_command" {
+  description = "A command to build the website for NodeJS for example"
+  default = ""
 }
 
 // App vars
@@ -72,18 +74,18 @@ variable "deploy_method" {
 // Lambda App
 variable "lambda_app_language" {
   description = "The environment for lambda to run your app"
-  default     = "python37"
+  default     = null
 }
 
 // DB Variables
 variable "database_engine" {
   description = "If a DB is required, which engine should be used for RDS"
-  default     = "mysql"
+  default     = null
 }
 
 variable "database_version" {
   description = "If a DB is required, which version of the selected engine should run"
-  default     = "5.7"
+  default     = null
 }
 
 variable "data_subnet_ids" {
@@ -98,9 +100,21 @@ variable "network_cidr_range" {
   default     = "10.0.0.0/16"
 }
 
+variable "enable_private_internet_access" {
+  description = "[Optional] Should non-public instance be able to access the Internet via a NAT instance."
+  type        = bool
+  default     = true
+}
+
 variable "tiers" {
   description = "[Optional] How many uniform tiers to create, use 'public' to create a public tier."
   default     = ["public", "data", "mid"]
+  type        = list(string)
+}
+
+variable "availability_zones" {
+  description = "[Optional] A list of Availability zones to operate in."
+  default     = ["a", "b", "c"]
   type        = list(string)
 }
 
@@ -108,13 +122,6 @@ variable "network_bits" {
   description = "[Optional] The number of network bits to be allocated"
   default     = 8
 }
-
-variable "enable_private_internet_access" {
-  description = "[Optional] Should non-public instance be able to access the Internet via a NAT instance."
-  type        = bool
-  default     = true
-}
-
 variable "code_sources" {
   description = "Sources to install each lambda app from"
   type        = list
@@ -125,3 +132,24 @@ variable "entry_point" {
   description = "Entry point for Lambda functions"
   default     = "lambda_handler:lambda_handler"
 }
+
+variable "protocol" {
+  description = "The protocol of the application"
+  default = "http"
+}
+
+variable "health_check_path" {
+  description = "The path that should be used to for the load balancer to health check against"
+  default = "/"
+}
+
+variable "max_capacity" {
+  description = "How many instances should be in the ASG"
+  default     = 3
+}
+
+variable "min_capacity" {
+  description = "How few instances should be in the ASG at all times"
+  default     = 1
+}
+
