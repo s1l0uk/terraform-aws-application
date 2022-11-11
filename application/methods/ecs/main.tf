@@ -1,12 +1,8 @@
-module "ecr" {
-  source = "../../resources/ecr"
-}
-
 resource "aws_ecs_cluster" "cluster" {
   name               = "${var.name}-cluster"
   capacity_providers = [var.capacity_provider == "" ? "FARGATE_SPOT" : var.capacity_provider]
   tags = {
-    Name = "${var.name}-cluster}"
+    Name = var.name
   }
 }
 
@@ -19,9 +15,9 @@ module "container" {
   region                      = var.region
   ecs_service_security_groups = var.security_group_ids
   container_port              = var.container_port
-  host_port                   = var.host_port
+  host_port                   = var.acm_certificate == "" ? var.host_port : 443
   container_memory            = var.container_memory
-  ecr_repository_url          = module.ecr.aws_ecr_repository_url
+  ecr_repository_url          = var.aws_ecr_repository_url
   aws_ecs_cluster             = aws_ecs_cluster.cluster.id
   health_check_path           = var.health_check_path
   vpc_id                      = var.vpc_id
@@ -30,4 +26,5 @@ module "container" {
   aws_lb                      = var.loadbalancer
   container_environment       = var.container_environment
   code_source                 = var.code_source
+  ssl_arn = var.acm_certificate == "" ? null : var.acm_certificate
 }

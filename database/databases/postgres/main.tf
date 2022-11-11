@@ -10,7 +10,7 @@ resource "aws_db_instance" "postgres_database" {
   publicly_accessible                 = var.publicly_accessible
   multi_az                            = length(var.availability_zones) > 1 ? true : false
   username                            = var.username
-  password                            = var.password == "" ? "RANDOM_STRING" : var.password
+  password                            = local.password == "" ? "RANDOM_STRING" : var.password
   storage_encrypted                   = var.storage_encrypted
   skip_final_snapshot                 = var.skip_final_snapshot
   db_subnet_group_name                = var.db_subnet_group.name
@@ -40,4 +40,16 @@ resource "aws_db_instance" "postgres_database" {
   lifecycle {
     ignore_changes = [password]
   }
+}
+output "connection_string" {
+  description = "Connection URL string for applications"
+  value = "mysql+pymysql://${var.username}:${local.password}@${aws_db_instance.postgres_database.endpoint}/${var.name}"
+}
+
+locals {
+  version_elements       = split(".", var.engine_version)
+  major_version_elements = [local.version_elements[0], local.version_elements[1]]
+  major_engine_version   = var.major_engine_version == "" ? join(".", local.major_version_elements) : var.major_engine_version
+  password = var.password == "" ? "RANDOM_STRING" : var.password
+  family                 = "mysql${local.major_engine_version}"
 }

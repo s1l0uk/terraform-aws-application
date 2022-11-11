@@ -46,7 +46,7 @@ variable "database_engine" {
 
 variable "engine_version" {
   description = "If a DB is required, which engine should be used for RDS"
-  default     = "5.7"
+  default     = "8.0"
 }
 
 variable "db_subnet_group" {
@@ -66,7 +66,7 @@ variable "option_group" {
 
 variable "major_engine_version" {
   description = "The Major DB version"
-  default     = "5"
+  default     = "8"
 }
 
 variable "instance_class" {

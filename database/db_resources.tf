@@ -59,12 +59,6 @@ resource "aws_db_parameter_group" "default" {
     apply_method = "immediate"
   }
 
-  parameter {
-    name         = "tx_isolation"
-    value        = var.tx_isolation
-    apply_method = "immediate"
-  }
-
   tags = merge({ "Name" = var.name }, var.tags)
 }
 

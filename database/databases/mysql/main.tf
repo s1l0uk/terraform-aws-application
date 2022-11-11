@@ -9,7 +9,7 @@ resource "aws_db_instance" "default" {
   instance_class                      = var.instance_class
   allocated_storage                   = var.allocated_storage
   username                            = var.username
-  password                            = var.password == "" ? "RANDOM_STRING" : var.password
+  password                            = local.password
   maintenance_window                  = var.maintenance_window
   backup_window                       = var.backup_window
   apply_immediately                   = var.apply_immediately
@@ -40,9 +40,15 @@ resource "aws_db_instance" "default" {
   }
 }
 
+output "connection_string" {
+  description = "Connection URL string for applications"
+  value = "mysql+pymysql://${var.username}:${local.password}@${aws_db_instance.default.endpoint}/${var.name}"
+}
+
 locals {
   version_elements       = split(".", var.engine_version)
   major_version_elements = [local.version_elements[0], local.version_elements[1]]
   major_engine_version   = var.major_engine_version == "" ? join(".", local.major_version_elements) : var.major_engine_version
+  password = var.password == "" ? "RANDOM_STRING" : var.password
   family                 = "mysql${local.major_engine_version}"
 }

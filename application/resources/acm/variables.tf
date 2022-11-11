@@ -1,12 +1,16 @@
 //App Secific
-variable "name" {
-  description = "app name to be deployed"
-  default     = "flask-api"
+variable "domain_name" {
+  description = "certificate host name"
 }
 
-variable "subnet_ids" {
-  description = "A list of subnets to deploy into"
-  default     = null
+variable "enable_wildcard" {
+  description = "Should a san be created"
+  default     = false
+}
+
+variable "zone_id" {
+  description = "Route 53 ZoneId to register against and validate certificates"
+  default     = false
 }
 
 variable "tags" {

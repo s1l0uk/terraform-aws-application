@@ -49,3 +49,7 @@ variable "min_capacity" {
   default     = 1
 }
 
+variable "environment_variables" {
+  description = "A Map of environment variables to ensure are applied"
+  default = {}
+}

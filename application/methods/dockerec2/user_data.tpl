@@ -3,12 +3,12 @@ repo_update: true
 repo_upgrade: all
 
 write_files:
-  - content: |
+  - path: /tmp/nginx.conf
+    content: |
       server {
         listen 80;
-
         location / {
-            proxy_pass http://api:5000;
+            proxy_pass http://api:8000;
             proxy_redirect     off;
             proxy_set_header   Host $host;
             proxy_set_header   X-Real-IP $remote_addr;
@@ -22,8 +22,8 @@ write_files:
             add_header Content-Type text/plain;
         }
       }
-    path: /tmp/nginx.conf
-  - content: |
+  - path: /tmp/docker-compose.yml
+    content: |
       version: "3"
       services:
         web:
@@ -36,29 +36,27 @@ write_files:
           volumes:
               - "./nginx.conf:/etc/nginx/conf.d/default.conf"
         api:
-          container_name: flask-api-${api_version}
-          image: pfragoso/flask-api:${api_version}
-          links:
-          - redis
+          container_name: ${app_name}-${api_version}
+          image: ${registry}/${app_name}:${api_version}
           restart: unless-stopped
           environment:
-          - REDIS_URL=redis://api-redis:6379/0
-          depends_on:
-            - redis
-        redis:
-          container_name: api-redis
-          image: redis
-          restart: unless-stopped
-    path: /tmp/docker-compose.yml
+          %{for k, v in jsondecode(environment_variables) ~}
+        - ${k}=${v}
+          %{ endfor ~}
+
 runcmd:
  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
- - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_r
+ - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
  - apt-get update
  - apt-get -y install docker-ce
  - usermod -aG docker ubuntu
- - curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`un
+ - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+ - ./aws/install
+ - curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
  - chmod +x /usr/local/bin/docker-compose
  - systemctl start docker
+ - aws ecr get-login --region ${region} | docker login --username AWS --password-stdin ${registry}/${app_name}
  - mkdir /app
  - mv /tmp/docker-compose.yml /tmp/nginx.conf /app
  - chown ubuntu /app

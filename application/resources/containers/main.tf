@@ -85,9 +85,11 @@ resource "aws_ecs_task_definition" "main" {
   task_role_arn      = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
     name        = "${var.name}-container"
-    image       = "${var.container_image}:latest"
+    image       = "${var.ecr_repository_url}:latest"
     essential   = true
-    environment = var.container_environment
+    environment = [ for k, v in var.container_environment :
+      {"name": k, "value": v}
+    ]
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
@@ -186,7 +188,7 @@ resource "aws_appautoscaling_policy" "ecs_policy_cpu" {
 
 resource "aws_lb_target_group" "main" {
   name        = "${var.name}-tg"
-  port        = var.host_port
+  port        = var.container_port
   protocol    = upper(var.protocol)
   vpc_id      = var.vpc_id
   target_type = "ip"
@@ -214,10 +216,10 @@ resource "aws_lb_target_group" "main" {
 resource "aws_lb_listener" "lister" {
   load_balancer_arn = var.aws_lb
   port              = var.host_port
-  protocol          = upper(var.protocol)
+  protocol          = var.host_port != 443 ? upper(var.protocol) : "HTTPS"
 
-  ssl_policy      = var.host_port != "443" ? null : "ELBSecurityPolicy-2016-08"
-  certificate_arn = var.host_port != "443" ? null : var.ssl_arn
+  ssl_policy      = var.host_port != 443 ? null : "ELBSecurityPolicy-2016-08"
+  certificate_arn = var.host_port != 443 ? null : var.ssl_arn
 
   default_action {
     target_group_arn = aws_lb_target_group.main.id
@@ -226,7 +228,7 @@ resource "aws_lb_listener" "lister" {
 }
 
 resource "aws_alb_listener" "http" {
-  count             = var.host_port == "443" ? 1 : 0
+  count             = var.host_port == 443 ? 1 : 0
   load_balancer_arn = var.aws_lb
   port              = 80
   protocol          = "HTTP"

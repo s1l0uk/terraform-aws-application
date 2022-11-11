@@ -85,8 +85,17 @@ variable "max_capacity" {
   default     = 3
 }
 
+
+variable "route_table_ids" {
+  description = "A list of Route table IDs"
+}
 variable "min_capacity" {
   description = "How few instances should be in the ASG at all times"
   default     = 1
+}
+
+variable "aws_ecr_repository_url" {
+  description = "A list of Route table IDs"
+  default = ""
 }
 

@@ -61,6 +61,11 @@ variable "instance_type" {
   default     = "t1.micro"
 }
 
+variable "database_instance_type" {
+  description = "Which database class to use for RDS"
+  default     = "db.t4g.micro "
+}
+
 variable "api_version" {
   description = "build version from containers"
   default     = "latest"
@@ -85,7 +90,7 @@ variable "database_engine" {
 
 variable "database_version" {
   description = "If a DB is required, which version of the selected engine should run"
-  default     = null
+  default     = "8.0"
 }
 
 variable "data_subnet_ids" {
@@ -143,6 +148,11 @@ variable "health_check_path" {
   default = "/"
 }
 
+variable "route_table_ids" {
+  description = "A list of route table IDs to update for endpoints"
+  default = []
+}
+
 variable "max_capacity" {
   description = "How many instances should be in the ASG"
   default     = 3
@@ -153,3 +163,22 @@ variable "min_capacity" {
   default     = 1
 }
 
+variable "environment_variables" {
+  description = "A map of variables to go with the deployment"
+  default     = {}
+}
+
+variable "hosted_zone_id" {
+  description = "A route53 hosted zone ID to use"
+  default = ""
+}
+
+variable "create_dns" {
+  description = "Should we create the DNS with the deploy"
+  default = false
+}
+
+variable "enable_ssl" {
+  description = "Should we Create SSL certificates with ACM"
+  default = false
+}

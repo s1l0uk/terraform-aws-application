@@ -1,9 +1,11 @@
 resource "aws_s3_bucket" "root_bucket" {
   bucket = var.name
+  force_destroy = true
 }
 
 resource "aws_s3_bucket" "www_bucket" {
   bucket = "www-${var.name}"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_website_configuration" "www_bucket" {
@@ -49,4 +51,7 @@ resource "aws_s3_bucket_object" "file" {
   source      = "${var.code_source}/${each.key}"
   source_hash = filemd5("${var.code_source}/${each.key}")
   acl         = "public-read"
+  depends_on = [
+    aws_s3_bucket.www_bucket
+  ]
 }

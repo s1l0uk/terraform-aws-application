@@ -81,17 +81,16 @@ variable "vpc_id" {
 
 variable "environment_variables" {
   description = "Environment variables to deploy with"
-  default     = null
 }
 
 variable "memory" {
   description = "How Much Memory should be allocated"
-  default     = 1000
+  default     = 1024
 }
 
 variable "cpu" {
   description = "How Much CPU should be allocated"
-  default     = 2
+  default     = 256
 }
 
 variable "loadbalancer" {
@@ -125,6 +124,10 @@ variable "protocol" {
   description = "The protocol of the application"
 }
 
+variable "route_table_ids" {
+  description = "A list of Route Table IDs"
+}
+
 variable "max_capacity" {
   description = "How many instances should be in the ASG"
   default     = 3
@@ -135,3 +138,12 @@ variable "min_capacity" {
   default     = 1
 }
 
+variable "hosted_zone_id" {
+  description = "A Route53 Hosted Zone if elemenets should be added to Route53"
+  default = ""
+}
+
+variable "acm_certificate" {
+  description = "ARN of Certificate to install into listeners"
+  default = ""
+}

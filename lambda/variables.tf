@@ -111,3 +111,8 @@ variable "entry_point" {
   description = "Entry point for Lambda functions"
   default     = "lambda_handler:lambda_handler"
 }
+
+variable "environment_variables" {
+  description = "A Map of environment variables to pass"
+  default     = {}
+}

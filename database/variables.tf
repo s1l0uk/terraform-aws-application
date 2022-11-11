@@ -51,7 +51,7 @@ variable "availability_zones" {
 // App vars
 variable "instance_type" {
   description = "Instance type"
-  default     = "t1.micro"
+  default     = "db.t4g.micro"
 }
 
 variable "api_version" {
@@ -72,12 +72,12 @@ variable "database_engine" {
 
 variable "engine_version" {
   description = "If a DB is required, which engine should be used for RDS"
-  default     = "5.7"
+  default     = "6.7"
 }
 
 variable "collation" {
   description = "The Major DB version"
-  default     = "5"
+  default     = "utf8_unicode_ci"
 }
 
 variable "tx_isolation" {
@@ -87,12 +87,12 @@ variable "tx_isolation" {
 
 variable "time_zone" {
   description = "The Major DB version"
-  default     = "5"
+  default     = "UTC"
 }
 
 variable "character_set" {
   description = "The Major DB version"
-  default     = "5"
+  default     = "utf8"
 }
 
 

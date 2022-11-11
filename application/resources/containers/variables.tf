@@ -67,12 +67,10 @@ variable "protocol" {
 
 variable "container_environment" {
   description = "The container environmnent variables"
-  type        = list(any)
 }
 
 variable "ssl_arn" {
   description = "Which SSL certificate to load"
-  default     = null
 }
 
 variable "code_source" {

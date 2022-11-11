@@ -13,6 +13,17 @@ data "aws_ami" "ubuntu_ami" {
   }
 }
 
+module "ecr" {
+  count = var.deploy_method == "dockerec2" || var.deploy_method == "ecs" || var.deploy_method == "fargate" ? 1 : 0
+  source = "./resources/ecr"
+  name = var.name
+  subnet_ids = var.subnet_ids
+  route_table_ids = var.route_table_ids
+  security_group_ids = var.security_group_ids
+  aws_region = var.region
+  vpc_id = var.vpc_id
+}
+
 module "ec2" {
   source             = "./methods/ec2"
   count              = var.deploy_method == "ec2" ? length(var.web_site_code_sources) : 0
@@ -24,6 +35,7 @@ module "ec2" {
   security_group_ids = var.security_group_ids
   loadbalancer       = var.loadbalancer
   ami_id             = data.aws_ami.ubuntu_ami.id
+  environment_variables = var.environment_variables
 }
 
 module "ecs" {
@@ -43,6 +55,8 @@ module "ecs" {
   security_group_ids    = var.security_group_ids
   region                = var.region
   code_source           = var.web_site_code_sources[count.index]
+  route_table_ids = var.route_table_ids
+  aws_ecr_repository_url = module.ecr[0].aws_ecr_repository_url
 }
 
 module "dockerec2" {
@@ -62,6 +76,8 @@ module "dockerec2" {
   health_check_path     = var.health_check_path
   host_port             = var.host_port
   ami_id                = data.aws_ami.ubuntu_ami.id
+  route_table_ids = var.route_table_ids
+  aws_ecr_repository_url = module.ecr[0].aws_ecr_repository_url
 }
 
 module "fargate" {
@@ -81,6 +97,9 @@ module "fargate" {
   security_group_ids    = var.security_group_ids
   region                = var.region
   code_source           = var.web_site_code_sources[count.index]
+  route_table_ids = var.route_table_ids
+  aws_ecr_repository_url = module.ecr[0].aws_ecr_repository_url
+  acm_certificate       = var.acm_certificate
 }
 
 module "s3" {
@@ -103,4 +122,5 @@ module "lambda" {
   language           = var.lambda_app_language
   availability_zones = var.availability_zones
   subnet_ids         = var.subnet_ids
+  environment_variables = var.environment_variables
 }

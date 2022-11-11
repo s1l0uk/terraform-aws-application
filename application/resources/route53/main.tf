@@ -1,28 +1,28 @@
-resource "aws_route53_zone" "main" {
-  name = var.domain_name
-  tags = var.common_tags
+resource "aws_route53_zone" "zone" {
+  name     = var.hostname
 }
 
-resource "aws_route53_record" "root-a" {
-  zone_id = aws_route53_zone.main.zone_id
-  name    = var.domain_name
-  type    = "A"
+resource "aws_route53_record" "nameservers" {
+  allow_overwrite = true
+  name            = var.hostname
+  ttl             = 300
+  type            = "NS"
+  zone_id         = aws_route53_zone.zone.zone_id
 
-  alias {
-    name                   = aws_cloudfront_distribution.root_s3_distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.root_s3_distribution.hosted_zone_id
-    evaluate_target_health = false
-  }
+  records = aws_route53_zone.zone.name_servers
 }
 
-resource "aws_route53_record" "www-a" {
-  zone_id = aws_route53_zone.main.zone_id
-  name    = "www.${var.domain_name}"
-  type    = "A"
+output "zone_id" {
+  description = "Zone ID of the Route53 Zone to assign records to"
+  value = aws_route53_zone.zone.zone_id
+}
 
-  alias {
-    name                   = aws_cloudfront_distribution.www_s3_distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.www_s3_distribution.hosted_zone_id
-    evaluate_target_health = false
-  }
+output "zone_object" {
+  description = "Zone object"
+  value = aws_route53_zone.zone
+}
+
+output "nameservers" {
+  description = "Name Servers record object"
+  value = aws_route53_record.nameservers
 }

@@ -64,6 +64,20 @@ variable "security_group_ids" {
   description = "A list of security groups to apply to the container"
 }
 
+variable "route_table_ids" {
+  description = "A list of Route table IDs"
+}
+
+variable "aws_ecr_repository_url" {
+  description = "A list of Route table IDs"
+  default = ""
+}
+
 variable "region" {
   description = "Which region should be operated in"
+}
+
+variable "acm_certificate" {
+  description = "An ARN for a certificate to load in the loadbalancer"
+  default = ""
 }
