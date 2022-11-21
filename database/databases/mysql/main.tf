@@ -34,7 +34,7 @@ resource "aws_db_instance" "default" {
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
   publicly_accessible                 = var.publicly_accessible
   ca_cert_identifier                  = var.ca_cert_identifier
-  tags                                = merge({ "Name" = var.name }, var.tags)
+  tags                                = merge({ "Name" = var.name }, {"AlwaysOn" = "True" },var.tags)
   lifecycle {
     ignore_changes = [password]
   }
